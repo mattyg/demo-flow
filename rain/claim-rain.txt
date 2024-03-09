@@ -1,5 +1,5 @@
 /**
- * for claiming, users will use the signed coupon by the game master,
+ * for claiming, users will use the signed coupon by the notary,
  * each user calls with the same coupon
  * 
  * it is passed as signed context
