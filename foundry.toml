@@ -6,7 +6,11 @@ libs = ["lib"]
 solc = "0.8.19"
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
-fs_permissions = [{ access = "write", path = "./deployments" }, { access="read", path="./lib/rain.interpreter/meta"}]
+fs_permissions = [
+  { access = "write", path = "./deployments" }, 
+  { access = "read", path = "./lib/rain.interpreter/meta"},
+  { access = "read", path = "./rain" }
+]
 
 # These settings should be used for snapshots
 optimizer = true

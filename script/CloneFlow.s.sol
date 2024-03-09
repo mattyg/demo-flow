@@ -14,6 +14,7 @@ contract CloneFlow is Script {
     function run() public {
         RainterpreterParserNPE2 parser = new RainterpreterParserNPE2();
         RainterpreterStoreNPE2 store = new RainterpreterStoreNPE2();
+
         RainterpreterNPE2 interpreter = new RainterpreterNPE2();
 
         bytes memory constructionMeta = vm.readFileBinary("lib/rain.interpreter/meta/RainterpreterExpressionDeployerNPE2.rain.meta");
@@ -22,14 +23,33 @@ contract CloneFlow is Script {
                 address(interpreter), address(store), address(parser), constructionMeta
             )
         );
-        (bytes memory bytecode, uint256[] memory constants) = parser.parse(bytes(":;"));
 
-        EvaluableConfigV3[] memory evaluableConfig = new EvaluableConfigV3[](1);
+        EvaluableConfigV3[] memory evaluableConfig = new EvaluableConfigV3[](3);
+
+        string memory depositRain = vm.readFile("rain/deposit-rain.txt");
+        (bytes memory depositBytecode, uint256[] memory depositConstants) = parser.parse(bytes(depositRain));
         evaluableConfig[0] = EvaluableConfigV3(
             deployer,
-            bytecode,
-            constants
+            depositBytecode,
+            depositConstants
         );
+
+        string memory closeRain = vm.readFile("rain/close-rain.txt");
+        (bytes memory closeBytecode, uint256[] memory closeConstants) = parser.parse(bytes(closeRain));
+        evaluableConfig[1] = EvaluableConfigV3(
+            deployer,
+            closeBytecode,
+            closeConstants
+        );
+
+        string memory claimRain = vm.readFile("rain/claim-rain.txt");
+        (bytes memory claimBytecode, uint256[] memory claimConstants) = parser.parse(bytes(claimRain));
+        evaluableConfig[2] = EvaluableConfigV3(
+            deployer,
+            claimBytecode,
+            claimConstants
+        );
+
 
         Flow flow = new Flow();
 

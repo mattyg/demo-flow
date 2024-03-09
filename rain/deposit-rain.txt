@@ -1,0 +1,14 @@
+you: context<0 0>(),
+me: context<0 1>(),
+payment-amount: context<1 0>(),
+
+/* ensure deposits are open */
+is-closed: get(hash("is-closed")),
+:ensure(equal-to(is-closed 0) "deposits are closed"),
+
+/* deposit into contract */
+_ _ _ _: 0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359 you me payment-amount,
+
+/* account that a deposit has been made */
+prev-amount: get(hash("total-deposited")),
+:set(hash("total-deposited") int-add(prev-amount payment-amount));

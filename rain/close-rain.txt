@@ -1,0 +1,13 @@
+you: context<0 0>(),
+me: context<0 1>(),
+payment-amount: context<1 0>(),
+
+/* ensure deposits are open */
+is-closed: get(hash("is-closed")),
+:ensure(equal-to(is-closed 0) "deposits are already closed"),
+
+/* ensure you are the notary */
+:ensure(equal-to(you 0x8d0F52e2A9d9fF7F4a6952C32552dEAd4f732DD5) "only notary can close"),
+
+/* mark deposits closed */
+:set(hash("is-closed") 1);

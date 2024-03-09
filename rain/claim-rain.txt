@@ -1,0 +1,51 @@
+/**
+ * for claiming, users will use the signed coupon by the game master,
+ * each user calls with the same coupon
+ * 
+ * it is passed as signed context
+ * 
+ * the coupon will be a signed message with the following fields:
+ * [0] this contract address
+ * [1] application evm wallet
+ * [2] application ActionHash (core 32 bytes only)
+ * [3] application amount
+ * [4] total deposit pool amount
+ */
+you: context<0 0>(),
+me: context<0 1>(),
+
+coupon-signer: context<2 0>(),
+
+/* coupon contents */
+contract: context<3 0>(),
+application-address: context<3 1>(),
+application-action-hash: context<3 2>(),
+application-amount: context<3 3>(),
+expected-total-deposited: context<3 4>(),
+
+/* ensure deposits are closed */
+is-closed: get(hash("is-closed")),
+:ensure(equal-to(is-closed 1) "deposits are still open"),
+
+/* ensure that the coupon is signed by the notary */
+:ensure(equal-to(coupon-signer 0x8d0F52e2A9d9fF7F4a6952C32552dEAd4f732DD5) "coupon signed by notary"),
+
+/* ensure that the coupon is for this contract */
+:ensure(equal-to(contract me) "coupon for this contract"),
+
+/* ensure the application-address is the caller */
+:ensure(equal-to(you application-address) "caller is application address"),
+
+/* ensure application has not claimed yet */
+application-has-claimed: get(application-action-hash),
+:ensure(equal-to(application-has-claimed 0) "already claimed"),
+
+/* ensure the coupon know the total amount deposited in the pool  */
+total-deposited: get(hash("total-deposited")),
+:ensure(equal-to(expected-total-deposited total-deposited) "incorrect total deposited"),
+
+/* transfer amount to application-address */
+_ _ _ _: 0x3c499c542cEF5E3811e1192ce70d8cC03d5c3359 me you application-amount,
+
+/* mark that application has claimed */
+:set(application-action-hash 1);
