@@ -21,7 +21,7 @@ contract CloneFlow is Script {
         RainterpreterNPE2 interpreter = new RainterpreterNPE2();
         vm.writeFile("deployments/latest/RainterpreterNPE2", vm.toString(address(interpreter)));
 
-        bytes memory constructionMeta = vm.readFileBinary("lib/rain.interpreter/meta/RainterpreterExpressionDeployerNPE2.rain.meta");
+        bytes memory constructionMeta = vm.readFileBinary("meta/Flow.meta");
         RainterpreterExpressionDeployerNPE2 deployer = new RainterpreterExpressionDeployerNPE2(
              RainterpreterExpressionDeployerNPE2ConstructionConfig(
                 address(interpreter), address(store), address(parser), constructionMeta
