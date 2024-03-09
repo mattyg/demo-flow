@@ -5,10 +5,10 @@ import "forge-std/Script.sol";
 import {Flow} from "rain.flow/concrete/basic/Flow.sol";
 import {CloneFactory} from "rain.factory/src/concrete/CloneFactory.sol";
 import {EvaluableConfigV3} from "rain.interpreter.interface/interface/IInterpreterCallerV2.sol";
-import {RainterpreterExpressionDeployerNPE2, RainterpreterExpressionDeployerNPE2ConstructionConfig, CONSTRUCTION_META_HASH} from "rain.interpreter/concrete/RainterpreterExpressionDeployerNPE2.sol";
-import {RainterpreterParserNPE2} from "rain.interpreter/concrete/RainterpreterParserNPE2.sol";
-import {RainterpreterStoreNPE2} from "rain.interpreter/concrete/RainterpreterStoreNPE2.sol";
-import {RainterpreterNPE2} from "rain.interpreter/concrete/RainterpreterNPE2.sol";
+import {RainterpreterExpressionDeployerNPE2, RainterpreterExpressionDeployerNPE2ConstructionConfig, CONSTRUCTION_META_HASH} from "rain.interpreter/src/concrete/RainterpreterExpressionDeployerNPE2.sol";
+import {RainterpreterParserNPE2} from "rain.interpreter/src/concrete/RainterpreterParserNPE2.sol";
+import {RainterpreterStoreNPE2} from "rain.interpreter/src/concrete/RainterpreterStoreNPE2.sol";
+import {RainterpreterNPE2} from "rain.interpreter/src/concrete/RainterpreterNPE2.sol";
 
 contract CloneFlow is Script {
     function run() public {
@@ -21,7 +21,7 @@ contract CloneFlow is Script {
         RainterpreterNPE2 interpreter = new RainterpreterNPE2();
         vm.writeFile("deployments/latest/RainterpreterNPE2", vm.toString(address(interpreter)));
 
-        bytes memory constructionMeta = vm.readFileBinary("meta/RainterpreterExpressionDeployerNPE2.rain.meta");
+        bytes memory constructionMeta = vm.readFileBinary("lib/rain.interpreter/meta/RainterpreterExpressionDeployerNPE2.rain.meta");
         RainterpreterExpressionDeployerNPE2 deployer = new RainterpreterExpressionDeployerNPE2(
              RainterpreterExpressionDeployerNPE2ConstructionConfig(
                 address(interpreter), address(store), address(parser), constructionMeta
